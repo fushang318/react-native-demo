@@ -1,0 +1,15 @@
+参考：
+http://reactnative.cn/docs/0.30/getting-started.html
+
+先安装 nodejs
+
+npm install -g react-native-cli
+
+进入工程
+
+npm install
+
+
+-------------
+
+https://www.sdk.cn/news/4530
