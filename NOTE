@@ -12,4 +12,10 @@ npm install
 
 -------------
 
+React Native 开发小Tips
 https://www.sdk.cn/news/4530
+https://segmentfault.com/a/1190000006048459
+
+布局与阴影
+http://reactnative.cn/docs/0.30/layout-props.html#content
+http://reactnative.cn/docs/0.30/shadow-props.html#content
