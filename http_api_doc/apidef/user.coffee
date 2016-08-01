@@ -1,5 +1,5 @@
 ###
-@api {POST} /api/auth/sign_up用户注册
+@api {POST} /api/auth/sign_up 用户注册
 @apiDescription 提交用户注册信息
 @apiName 1 user sign up
 @apiGroup User

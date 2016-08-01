@@ -1,8 +1,8 @@
 define({ "api": [
   {
     "type": "POST",
-    "url": "/api/auth/sign_up用户注册",
-    "title": "",
+    "url": "/api/auth/sign_up",
+    "title": "用户注册",
     "description": "<p>提交用户注册信息</p>",
     "name": "1_user_sign_up",
     "group": "User",
