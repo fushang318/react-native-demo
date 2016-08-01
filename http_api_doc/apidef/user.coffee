@@ -1,5 +1,5 @@
 ###
-@api {POST} /sign_up 用户注册
+@api {POST} /api/auth/sign_up用户注册
 @apiDescription 提交用户注册信息
 @apiName 1 user sign up
 @apiGroup User
@@ -24,7 +24,7 @@
 ###
 
 ###
-@api {POST} /sign_in 用户登录
+@api {POST} /api/auth/sign_in 用户登录
 @apiDescription 用户登录
 @apiName 2 user sign in
 @apiGroup User
@@ -50,7 +50,7 @@
 ###
 
 ###
-@api {get} /users/info 获取用户信息
+@api {get} /api/users/info 获取用户信息
 @apiDescription 获取当前登录的用户信息
 @apiName 3 get user information
 @apiGroup User
@@ -70,7 +70,7 @@
 ###
 
 ###
-@api {PUT} /users/info 修改用户信息
+@api {PUT} /api/users/info 修改用户信息
 @apiDescription 修改当前登录的用户信息
 @apiName 4 change user information
 @apiGroup User

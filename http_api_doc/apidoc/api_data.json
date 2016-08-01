@@ -1,8 +1,8 @@
 [
   {
     "type": "POST",
-    "url": "/sign_up",
-    "title": "用户注册",
+    "url": "/api/auth/sign_up用户注册",
+    "title": "",
     "description": "<p>提交用户注册信息</p>",
     "name": "1_user_sign_up",
     "group": "User",
@@ -55,12 +55,12 @@
       ]
     },
     "version": "0.0.0",
-    "filename": "myapp/user.coffee",
+    "filename": "apidef/user.coffee",
     "groupTitle": "User"
   },
   {
     "type": "POST",
-    "url": "/sign_in",
+    "url": "/api/auth/sign_in",
     "title": "用户登录",
     "description": "<p>用户登录</p>",
     "name": "2_user_sign_in",
@@ -120,12 +120,12 @@
       ]
     },
     "version": "0.0.0",
-    "filename": "myapp/user.coffee",
+    "filename": "apidef/user.coffee",
     "groupTitle": "User"
   },
   {
     "type": "get",
-    "url": "/users/info",
+    "url": "/api/users/info",
     "title": "获取用户信息",
     "description": "<p>获取当前登录的用户信息</p>",
     "name": "3_get_user_information",
@@ -158,12 +158,12 @@
       ]
     },
     "version": "0.0.0",
-    "filename": "myapp/user.coffee",
+    "filename": "apidef/user.coffee",
     "groupTitle": "User"
   },
   {
     "type": "PUT",
-    "url": "/users/info",
+    "url": "/api/users/info",
     "title": "修改用户信息",
     "description": "<p>修改当前登录的用户信息</p>",
     "name": "4_change_user_information",
@@ -216,7 +216,7 @@
       ]
     },
     "version": "0.0.0",
-    "filename": "myapp/user.coffee",
+    "filename": "apidef/user.coffee",
     "groupTitle": "User"
   }
 ]
