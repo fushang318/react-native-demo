@@ -12,26 +12,35 @@ import {
 
 import Icon from 'react-native-vector-icons/FontAwesome'
 
+import IconView from '../../components/IconView'
 
-export default SignInPage = React.createClass({
-  render () {
-    return (
-      <View style={styles.page}>
-        <Nav />
-        <Form />
-      </View>
-    )
-  }
-})
-
-class Nav extends React.Component {
+export default class SignInPage extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      active: 0
+      nav: 'sign-in'
     }
   }
 
+  render () {
+    return (
+      <View style={styles.page}>
+        <Nav active={this.state.nav} toggle={this.toggle.bind(this)} />
+        {
+          this.state.nav == 'sign-in' ? <SignInForm /> : <SignUpForm />
+        }
+      </View>
+    )
+  }
+
+  toggle (nav) {
+    return () => {
+      this.setState({nav: nav})
+    }
+  }
+}
+
+class Nav extends React.Component {
   render () {
     var style_nav = {
       flex: 1, padding: 45,
@@ -57,30 +66,39 @@ class Nav extends React.Component {
       borderStyle: 'solid'
     }
 
-    var style_link_text = {
+    var style_link_text_active = {
       textAlign: 'center',
       color: 'white',
       fontSize: 20,
     }
 
-    var s0 = this.state.active == 0 ? style_link_active : style_link
-    var s1 = this.state.active == 1 ? style_link_active : style_link
+    var style_link_text = {
+      textAlign: 'center',
+      color: 'rgba(255, 255, 255, 0.6)',
+      fontSize: 20,
+    }
+
+    var s0 = this.props.active == 'sign-in' ? style_link_active : style_link
+    var s1 = this.props.active == 'sign-up' ? style_link_active : style_link
+
+    var st0 = this.props.active == 'sign-in' ? style_link_text_active : style_link_text
+    var st1 = this.props.active == 'sign-up' ? style_link_text_active : style_link_text
 
     return (
       <View style={style_nav}>
         <TouchableWithoutFeedback
-          onPress={this.click_sign_in.bind(this)}
+          onPress={this.props.toggle('sign-in')}
         >
           <View style={s0}>
-            <Text style={style_link_text}>登录</Text>
+            <Text style={st0}>登录</Text>
           </View>
         </TouchableWithoutFeedback>
 
         <TouchableWithoutFeedback
-          onPress={this.click_sign_up.bind(this)}
+          onPress={this.props.toggle('sign-up')}
         >
           <View style={s1}>
-            <Text style={style_link_text}>注册</Text>
+            <Text style={st1}>注册</Text>
           </View>
         </TouchableWithoutFeedback>
         <View style={{flex: 1}} />
@@ -97,38 +115,32 @@ class Nav extends React.Component {
   }
 }
 
-var Form = React.createClass({
-  getInitialState () {
-    return {
+class SignInForm extends React.Component {
+  constructor (props) {
+    super(props)
+    this.state = {
       username: '',
       password: ''
     }
-  },
+  }
 
   render () {
     return (
       <View style={styles.form}>
-        <View style={styles.input_view}>
-          <IconView type='user' />
-          <TextInput
-            style={styles.input}
-            placeholder={'请输入用户名'}
-            placeholderTextColor={'#fffc'}
-            onChangeText={(username) => this.setState({username})}
-            value={this.state.username}
-          ></TextInput>
-        </View>
+        <Input
+          icon='user'
+          placeholder='用户名'
+          onChangeText={(username) => this.setState({username})}
+          value={this.state.username}
+        ></Input>
 
-        <View style={styles.input_view}>
-          <IconView type='lock' />
-          <TextInput
-            style={styles.input}
-            placeholder={'请输入密码'}
-            placeholderTextColor={'#fffc'}
-            onChangeText={(password) => this.setState({password})}
-            value={this.state.password}
-          ></TextInput>
-        </View>
+        <Input
+          icon='lock'
+          placeholder='密码'
+          secureTextEntry={true}
+          onChangeText={(password) => this.setState({password})}
+          value={this.state.password}
+        ></Input>
 
         <TouchableWithoutFeedback
           onPress={() =>
@@ -144,32 +156,89 @@ var Form = React.createClass({
       </View>
     )
   }
-})
+}
 
-var IconView = React.createClass({
+class SignUpForm extends React.Component {
+  constructor (props) {
+    super(props)
+    this.state = {
+      username: '',
+      password: ''
+    }
+  }
+
   render () {
-    var style0 = {
-      backgroundColor: '#fff3',
-      position: 'absolute',
-      width: input_view_height,
-      height: input_view_height,
-      top: 0, left: 0,
-      justifyContent: 'center'
-    }
-
-    var style1 = {
-      fontSize: 20, 
-      color: 'white', 
-      textAlign: 'center'
-    }
-    
     return (
-      <View style={style0}>
-        <Icon name={this.props.type} style={style1} />
+      <View style={styles.form}>
+        <Input
+          icon='user'
+          placeholder='用户名'
+          onChangeText={(username) => this.setState({username})}
+          value={this.state.username}
+        ></Input>
+
+        <Input
+          icon='lock'
+          placeholder='密码'
+          secureTextEntry={true}
+          onChangeText={(password) => this.setState({password})}
+          value={this.state.password}
+        ></Input>
+
+        <TouchableWithoutFeedback
+          onPress={() =>
+            Alert.alert(
+              '你按了登录按钮'
+            )
+          }
+        >
+          <View style={styles.submit_btn}>
+            <Text style={styles.submit_btn_text}>注　册</Text>
+          </View>
+        </TouchableWithoutFeedback>
       </View>
     )
   }
-})
+}
+
+class Input extends React.Component {
+  render () {
+    return (
+      <View style={styles.input_view}>
+        <InputIcon type={this.props.icon} />
+        <TextInput
+          style={styles.input}
+          placeholderTextColor={'#fffc'}
+
+          secureTextEntry={this.props.secureTextEntry}
+          placeholder={this.props.placeholder}
+          onChangeText={this.props.onChangeText}
+          value={this.props.value}
+        ></TextInput>
+      </View>
+    )
+  }
+}
+
+class InputIcon extends React.Component {
+  render () {
+    return (
+      <IconView 
+        width={input_view_height}
+        height={input_view_height}
+        backgroundColor='#fff3'
+        color='#fff'
+        type={this.props.type}
+        style={{
+          position: 'absolute',
+          top: 0, left: 0
+        }}
+      ></IconView>
+    )
+  }
+}
+
+
 
 const input_view_height = 50
 const page_bg = '#41C4FE'
