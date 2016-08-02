@@ -179,10 +179,27 @@ class SignInForm extends React.Component {
         ></Input>
 
         <TouchableWithoutFeedback
-          onPress={() =>
-            Alert.alert(
-              '你按了登录按钮'
-            )
+          onPress={() => {
+            // Alert.alert("请求开始")
+
+            fetch('http://192.168.0.102:10086/api/users/info')
+              .then((response) => response.json())
+              .then((responseJson) => {
+                // switch (responseJson.State) {
+                //   case 0: 
+                //     Alert.alert("用户名：" + responseJson.name)
+                //     break
+                //   case 1:
+                //   case 2:
+                //   default:
+                //     Alert.alert("请求错误")
+                // }
+                Alert.alert("用户名：" + responseJson.name)
+              })
+              .catch((error) => {
+                Alert.alert("请求出错")
+              })
+            }
           }
         >
           <View style={styles.submit_btn}>
@@ -223,9 +240,7 @@ class SignUpForm extends React.Component {
 
         <TouchableWithoutFeedback
           onPress={() =>
-            Alert.alert(
-              '你按了登录按钮'
-            )
+            Alert.alert('你按了注册按钮')
           }
         >
           <View style={styles.submit_btn}>
