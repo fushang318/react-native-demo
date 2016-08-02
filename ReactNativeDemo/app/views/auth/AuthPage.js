@@ -7,7 +7,9 @@ import {
   Alert,
 
   TouchableWithoutFeedback,
-  TouchableHighlight
+  TouchableHighlight,
+
+  Animated
 } from 'react-native'
 
 import Icon from 'react-native-vector-icons/FontAwesome'
@@ -18,7 +20,10 @@ export default class SignInPage extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      nav: 'sign-in'
+      nav: 'sign-in',
+
+      fadeAnim: new Animated.Value(1),
+      leftAnim: new Animated.Value(0)
     }
   }
 
@@ -26,16 +31,47 @@ export default class SignInPage extends React.Component {
     return (
       <View style={styles.page}>
         <Nav active={this.state.nav} toggle={this.toggle.bind(this)} />
+
+        <Animated.View
+          style={{
+            opacity: this.state.fadeAnim,
+            transform: [
+              {translateY: this.state.leftAnim}
+            ]
+          }}
+        >
         {
           this.state.nav == 'sign-in' ? <SignInForm /> : <SignUpForm />
         }
+        </Animated.View>
       </View>
     )
   }
 
+  componentDidUpdate() {
+    Animated.parallel([
+      Animated.timing(
+        this.state.fadeAnim, {
+          toValue: 1,
+          duration: 500
+        }
+      ),
+      Animated.timing(
+        this.state.leftAnim, {
+          toValue: 0,
+          duration: 500
+        }
+      )
+    ]).start()
+  }
+
   toggle (nav) {
     return () => {
-      this.setState({nav: nav})
+      this.setState({
+        nav: nav,
+        fadeAnim: new Animated.Value(0),
+        leftAnim: new Animated.Value(50)
+      })
     }
   }
 }

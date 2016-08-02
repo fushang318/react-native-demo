@@ -10,6 +10,6 @@ import {
   AppRegistry
 } from 'react-native'
 
-import SignInPage from './app/views/auth/SignInPage'
+import AuthPage from './app/views/auth/AuthPage'
 
-AppRegistry.registerComponent('ReactNativeDemo', () => SignInPage)
+AppRegistry.registerComponent('ReactNativeDemo', () => AuthPage)
