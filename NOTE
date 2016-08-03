@@ -37,3 +37,15 @@ https://github.com/whatwg/fetch/issues/20#issuecomment-135426968
 
 FLEX 布局
 https://css-tricks.com/snippets/css/a-guide-to-flexbox/
+
+
+
+android 打包方法
+http://reactnative.cn/docs/0.30/signed-apk-android.html#content
+
+先把 jdk/bin 加到 PATH，确认可以运行 keytool
+
+keytool -genkey -v -keystore <自定义>.keystore -alias <自定义> -keyalg RSA -keysize 2048 -validity 10000
+如：
+keytool -genkey -v -keystore react.keystore -alias react -keyalg RSA -keysize 2048 -validity 10000
+输入口令，开发者信息等信息，开发调试时随意，正式发布时不能随意
