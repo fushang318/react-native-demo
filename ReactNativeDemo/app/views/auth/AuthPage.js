@@ -17,7 +17,7 @@ import {
 import Icon from 'react-native-vector-icons/FontAwesome'
 
 import IconView from '../../components/IconView'
-import AnimatedFadeView from '../../components/animated/AnimatedFadeView'
+
 
 export default class SignInPage extends React.Component {
   constructor (props) {
@@ -36,20 +36,54 @@ export default class SignInPage extends React.Component {
       <View style={styles.page}>
         <Nav active={this.state.nav} toggle={this.toggle.bind(this)} />
         <LandingLogo />
+
+        <Animated.View
+          style={{
+            opacity: this.state.fadeAnim,
+            transform: [
+              {translateY: this.state.leftAnim},
+              {scale: this.state.scaleAnim},
+            ]
+          }}
+        >
         {
-          this.state.nav == 'sign-in' ? 
-            <AnimatedFadeView><SignInForm /></AnimatedFadeView> 
-            :
-            <AnimatedFadeView><SignUpForm /></AnimatedFadeView>
+          this.state.nav == 'sign-in' ? <SignInForm /> : <SignUpForm />
         }
+        </Animated.View>
       </View>
     )
+  }
+
+  componentDidUpdate() {
+    Animated.parallel([
+      Animated.timing(
+        this.state.fadeAnim, {
+          toValue: 1,
+          duration: 500
+        }
+      ),
+      Animated.timing(
+        this.state.leftAnim, {
+          toValue: 0,
+          duration: 500
+        }
+      ),
+      Animated.timing(
+        this.state.scaleAnim, {
+          toValue: 1,
+          duration: 500
+        }
+      ),
+    ]).start()
   }
 
   toggle (nav) {
     return () => {
       this.setState({
         nav: nav,
+        fadeAnim: new Animated.Value(0),
+        leftAnim: new Animated.Value(50),
+        scaleAnim: new Animated.Value(0.8),
       })
     }
   }
@@ -138,8 +172,7 @@ class LandingLogo extends React.Component {
       paddingRight: 45,
       // backgroundColor: 'red',
       alignItems: 'flex-end',
-      marginBottom: 30,
-      opacity: 0,
+      marginBottom: 30
     }
 
     width = Dimensions.get('window').width - 45 * 2
