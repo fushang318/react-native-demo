@@ -96,6 +96,17 @@ android {
             abiFilters "armeabi-v7a", "x86"
         }
     }
+
+    // 打包配置
+    signingConfigs {
+        release {
+            storeFile file(MYAPP_RELEASE_STORE_FILE)
+            storePassword MYAPP_RELEASE_STORE_PASSWORD
+            keyAlias MYAPP_RELEASE_KEY_ALIAS
+            keyPassword MYAPP_RELEASE_KEY_PASSWORD
+        }
+    }
+
     splits {
         abi {
             reset()
@@ -105,19 +116,11 @@ android {
         }
     }
 
-    signingConfigs {
-      release {
-          storeFile file(REACT_NATIVE_DEMO_RELEASE_STORE_FILE)
-          storePassword REACT_NATIVE_DEMO_RELEASE_STORE_PASSWORD
-          keyAlias REACT_NATIVE_DEMO_RELEASE_KEY_ALIAS
-          keyPassword REACT_NATIVE_DEMO_RELEASE_KEY_PASSWORD
-      }
-    }
-
     buildTypes {
         release {
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
+            // 打包配置
             signingConfig signingConfigs.release
         }
     }
