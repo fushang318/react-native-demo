@@ -49,3 +49,16 @@ cmd 下运行
 adb reverse tcp:8097 tcp:8097
 ```
 就可以进行调试了
+
+## 生成演示APK
+运行 `react-native run-android ` 命令后再手机运行的是 debug 模式，需要手机和电脑保持连接才能运行  
+如果需要生成可以离开电脑使用的演示版 apk，运行如下命令:
+```
+# 在运行命令之前，确保已经关闭了 debug 模式下的 react-native debug server 窗口，不然可能会出现打包后的apk 无法正常使用
+cd react-native-demo\ReactNativeDemo\android
+gradlew assembleDemoRelease
+```
+命令执行完毕后会生成 apk 文件，路径为：
+```
+react-native-demo\ReactNativeDemo\android\app\build\outputs\apk\app-demoRelease.apk
+```
