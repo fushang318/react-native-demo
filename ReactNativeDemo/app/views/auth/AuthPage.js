@@ -5,6 +5,7 @@ import {
   TextInput,
   StyleSheet,
   Alert,
+  Image,
 
   TouchableWithoutFeedback,
   TouchableHighlight,
@@ -16,6 +17,7 @@ import Icon from 'react-native-vector-icons/FontAwesome'
 
 import IconView from '../../components/IconView'
 
+
 export default class SignInPage extends React.Component {
   constructor (props) {
     super(props)
@@ -23,7 +25,8 @@ export default class SignInPage extends React.Component {
       nav: 'sign-in',
 
       fadeAnim: new Animated.Value(1),
-      leftAnim: new Animated.Value(0)
+      leftAnim: new Animated.Value(0),
+      scaleAnim: new Animated.Value(1),
     }
   }
 
@@ -36,10 +39,12 @@ export default class SignInPage extends React.Component {
           style={{
             opacity: this.state.fadeAnim,
             transform: [
-              {translateY: this.state.leftAnim}
+              {translateY: this.state.leftAnim},
+              {scale: this.state.scaleAnim},
             ]
           }}
         >
+          <LandingLogo />
         {
           this.state.nav == 'sign-in' ? <SignInForm /> : <SignUpForm />
         }
@@ -61,7 +66,13 @@ export default class SignInPage extends React.Component {
           toValue: 0,
           duration: 500
         }
-      )
+      ),
+      Animated.timing(
+        this.state.scaleAnim, {
+          toValue: 1,
+          duration: 500
+        }
+      ),
     ]).start()
   }
 
@@ -70,7 +81,8 @@ export default class SignInPage extends React.Component {
       this.setState({
         nav: nav,
         fadeAnim: new Animated.Value(0),
-        leftAnim: new Animated.Value(50)
+        leftAnim: new Animated.Value(50),
+        scaleAnim: new Animated.Value(0.8),
       })
     }
   }
@@ -151,6 +163,34 @@ class Nav extends React.Component {
   }
 }
 
+class LandingLogo extends React.Component {
+  render () {
+    var style = {
+      flexDirection: 'row',
+      paddingLeft: 45,
+      paddingRight: 45,
+      // backgroundColor: 'red',
+      alignItems: 'flex-end',
+      marginBottom: 30
+    }
+
+    s0 = {
+      width: 388 / 3.5, height: 388 / 3.5, opacity: 0.9, marginLeft: 10
+    }
+
+    s1 = {
+      width: 582 / 4, height: 164 / 4, marginLeft: 20
+    }
+
+    return (
+      <View style={style}>
+        <Image source={require('../../assets/image/tree.png')} style={s0} />
+        <Image source={require('../../assets/image/travel.png')} style={s1}/>
+      </View>
+    )
+  }
+}
+
 class SignInForm extends React.Component {
   constructor (props) {
     super(props)
@@ -180,24 +220,15 @@ class SignInForm extends React.Component {
 
         <TouchableWithoutFeedback
           onPress={() => {
-            // Alert.alert("请求开始")
-
             fetch('http://192.168.0.102:10086/api/users/info')
-              .then((response) => response.json())
-              .then((responseJson) => {
-                // switch (responseJson.State) {
-                //   case 0: 
-                //     Alert.alert("用户名：" + responseJson.name)
-                //     break
-                //   case 1:
-                //   case 2:
-                //   default:
-                //     Alert.alert("请求错误")
-                // }
-                Alert.alert("用户名：" + responseJson.name)
-              })
-              .catch((error) => {
-                Alert.alert("请求出错")
+              .then((res) => {
+                if (res.ok) {
+                  res.json().then((resJson) => {
+                    Alert.alert("用户名：" + resJson.name)
+                  })
+                } else {
+                  Alert.alert('请求出错了')
+                }
               })
             }
           }
