@@ -43,7 +43,7 @@ http://pan.baidu.com/s/1i5O0q9J#path=%252FAndroid%252FDeveloper%2520Tools%252FWi
 # 1 PC 会额外启动一个 cmd 窗口运行 react native debug server
 # 2 很多手机会弹框提示是否允许安装，请点击是，否则过一段时间会自动拒绝，导致安装失败
 # 3 安装成功后，手动点击应用图片进入应用，可能会出现白屏的情况，这是因为 react native debug server 还没有完全启动完毕，等待一会后就会出现正确的界面了
-
+# 4 有些机器的权限管理比较严格，如果进入正常界面后，摇动手机不会出现调试菜单，那么需要进入应用的权限设置并开启悬浮框权限（各个品牌手机设置方式不同，请自行查找方式）
 cd ReactNativeDemo
 run-android.bat
 ```
