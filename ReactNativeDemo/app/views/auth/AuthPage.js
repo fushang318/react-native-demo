@@ -18,6 +18,8 @@ import Icon from 'react-native-vector-icons/FontAwesome'
 
 import IconView from '../../components/IconView'
 
+import APIFetch from 'APIFetch'
+import API from 'API'
 
 export default class SignInPage extends React.Component {
   constructor (props) {
@@ -79,6 +81,10 @@ export default class SignInPage extends React.Component {
 
   toggle (nav) {
     return () => {
+      if (this.state.nav == nav) {
+        return
+      }
+
       this.setState({
         nav: nav,
         fadeAnim: new Animated.Value(0),
@@ -154,14 +160,6 @@ class Nav extends React.Component {
       </View>
     )
   }
-
-  click_sign_in () {
-    this.setState({active: 0})
-  }
-
-  click_sign_up () {
-    this.setState({active: 1})
-  }
 }
 
 class LandingLogo extends React.Component {
@@ -210,11 +208,17 @@ class SignInForm extends React.Component {
     super(props)
     this.state = {
       username: '',
-      password: ''
+      password: '',
+
+      loading: false,
     }
   }
 
   render () {
+    valid = this.valid()
+    btn_disabled = !valid
+    btn_text = valid ? '登　录' : '输入信息后点击登录'
+
     return (
       <View style={styles.form}>
         <Input
@@ -232,27 +236,37 @@ class SignInForm extends React.Component {
           value={this.state.password}
         ></Input>
 
-        <TouchableWithoutFeedback
-          onPress={() => {
-            fetch('http://192.168.0.102:10086/api/users/info')
-              .then((res) => {
-                if (res.ok) {
-                  res.json().then((resJson) => {
-                    Alert.alert("用户名：" + resJson.name)
-                  })
-                } else {
-                  Alert.alert('请求出错了')
-                }
-              })
-            }
-          }
-        >
-          <View style={styles.submit_btn}>
-            <Text style={styles.submit_btn_text}>登　录</Text>
-          </View>
-        </TouchableWithoutFeedback>
+        <Button onPress={this.sign_in.bind(this)} disabled={btn_disabled} loading={this.state.loading} >
+          <Text style={styles.submit_btn_text}>{btn_text}</Text>
+        </Button>
       </View>
     )
+  }
+
+  valid () {
+    return this.state.username.length > 0 && this.state.password.length > 0
+  }
+
+  sign_in () {
+    user = {
+      name: this.state.username,
+      password: this.state.password,
+      // debug: 'user_not_exists'
+    }
+
+    this.setState({loading: true})
+
+    API.auth.sign_in(user)
+      .done((resJSON) => {
+        console.log(resJSON)
+        Alert.alert(JSON.stringify(resJSON))
+      })
+      .fail((resJSON) => {
+        Alert.alert(resJSON.error)
+      })
+      .always((res) => {
+        this.setState({loading: false})
+      })
   }
 }
 
@@ -283,16 +297,61 @@ class SignUpForm extends React.Component {
           value={this.state.password}
         ></Input>
 
-        <TouchableWithoutFeedback
-          onPress={() =>
-            Alert.alert('你按了注册按钮')
-          }
-        >
-          <View style={styles.submit_btn}>
-            <Text style={styles.submit_btn_text}>注　册</Text>
-          </View>
-        </TouchableWithoutFeedback>
+        <Button onPress={this.sign_up.bind(this)}>
+          <Text style={styles.submit_btn_text}>注　册</Text>
+        </Button>
       </View>
+    )
+  }
+
+  sign_up () {
+    user = {
+      name: this.state.username,
+      password: this.state.password
+    }
+
+    API.auth.sign_up(user)
+  }
+}
+
+class Button extends React.Component {
+  render () {
+    disabled = this.props.disabled
+    loading = this.props.loading
+
+    style = {
+      backgroundColor: '#fff',
+      borderRadius: 100,
+      height: input_view_height,
+      marginTop: 15,
+      justifyContent: 'center',
+    }
+
+    press = this.props.onPress
+    children = this.props.children
+
+    if (disabled) {
+      style = [style, {
+        opacity: 0.6
+      }]
+
+      press = null
+    }
+
+    if (loading) {
+      press = null
+      children = 
+        <Text style={styles.submit_btn_text}>正在请求 ……</Text>
+    }
+
+    return (
+      <TouchableWithoutFeedback
+        onPress={press}
+      >
+        <View style={style}>
+          {children}
+        </View>
+      </TouchableWithoutFeedback>
     )
   }
 }
@@ -362,14 +421,6 @@ const styles = {
     color: 'white',
     paddingLeft: 15,
     paddingRight: 15,
-  },
-
-  submit_btn: {
-    backgroundColor: '#fffc',
-    borderRadius: 100,
-    height: input_view_height,
-    marginTop: 15,
-    justifyContent: 'center',
   },
   submit_btn_text: {
     textAlign: 'center',
