@@ -10,6 +10,7 @@ import {
   AppRegistry
 } from 'react-native'
 
-import AuthPage from './app/views/auth/AuthPage'
+// import AuthPage from './app/views/auth/AuthPage'
+import ImagePickerDemo from './app/views/demo/ImagePickerDemo'
 
-AppRegistry.registerComponent('ReactNativeDemo', () => AuthPage)
+AppRegistry.registerComponent('ReactNativeDemo', () => ImagePickerDemo)
