@@ -10,6 +10,6 @@ import {
   AppRegistry
 } from 'react-native'
 
-import AuthPage from './app/views/auth/AuthPage'
+import CameraRollExample from './app/demo/CameraRollExample'
 
-AppRegistry.registerComponent('ReactNativeDemo', () => AuthPage)
+AppRegistry.registerComponent('ReactNativeDemo', () => CameraRollExample)
