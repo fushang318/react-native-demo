@@ -3,71 +3,37 @@
  */
 
 import {
-  Alert
+  Alert,
+  AsyncStorage
 } from 'react-native'
 
-export default Fetch = {
+export default APIFetch = {
+  get_cookie () {
+    return _get_cookie()
+  },
+
+  clear_cookie () {
+    return _clear_cookie()
+  },
+
   get (url, data = {}) {
-    var done_func = function(){}
-    var fail_func = function(){}
-
-    promise = {
-      done (func) {
-        done_func = func
-        return promise
-      },
-
-      fail (func) {
-        fail_func = func
-        return promise
-      },
-
-      always (func) {
-        always_func = func
-        return promise
-      }
-    }
+    promise = new FetchPromise()
 
     console.log("GET: " + url)
+    console.log(data)
 
-    fetch(url, {
-      method: 'GET',
-      body: JSON.stringify(data)
-    })
-      .then((res) => {
-        if (res.ok) {
-          res.json().then(done_func)
-        } else {
-          res.json().then(fail_func)
-        }
+    // _get_cookie().then((cookie) => {
+      fetch(url, {
+        method: 'GET',
+      }).then(request_then(promise))
 
-        always_func(res)
-      })
+      return promise
+    // })
 
-    return promise
   },
 
   post (url, data = {}) {
-    var done_func = function(){}
-    var fail_func = function(){}
-    var always_func = function(){}
-
-    promise = {
-      done (func) {
-        done_func = func
-        return promise
-      },
-
-      fail (func) {
-        fail_func = func
-        return promise
-      },
-
-      always (func) {
-        always_func = func
-        return promise
-      }
-    }
+    promise = new FetchPromise()
 
     console.log("POST: " + url)
     console.log(data)
@@ -77,30 +43,75 @@ export default Fetch = {
       value = data[key]
       form_data.append(key, value)
     }
-
     console.log(form_data)
 
-    fetch(url, {
-      method: 'POST',
-      body: form_data
-    })
-      .then((res) => {
-        console.log(res)
-        content_type = res.headers.get('content-type')
-
-        if (content_type && content_type.indexOf('application/json') > -1) {
-          if (res.ok) {
-            res.json().then(done_func)
-          } else {
-            res.json().then(fail_func)
-          }
-        } else {
-          console.log('返回的不是 JSON 信息')
-        }
-
-        always_func(res)
-      })
+    // _get_cookie().then((cookie) => {
+      fetch(url, {
+        method: 'POST',
+        body: form_data
+      }).then(request_then(promise))
+    // })
 
     return promise
+  }
+}
+
+const request_then = (promise) => {
+  return (res) => {
+    console.log(res)
+
+    // save_cookie(res).then(function(){
+      if (is_json(res)) {
+        res.json().then(res.ok ? promise.done_func : promise.fail_func)
+      } else {
+        console.log('返回的不是 JSON 信息')
+      }
+
+      promise.always_func(res)
+    // })
+  }
+}
+
+
+const save_cookie = function(res, func) {
+  cookie = res.headers.get('Set-Cookie') || ''
+  console.log('获取到 cookie', cookie)
+  return AsyncStorage.setItem('appCookie', cookie)
+}
+
+const _get_cookie = function(func) {
+  return AsyncStorage.getItem('appCookie')
+}
+
+const _clear_cookie = function(func) {
+  console.log('remove cookie')
+  return AsyncStorage.removeItem('appCookie')
+}
+
+const is_json = function(res) {
+  content_type = res.headers.get('content-type')
+  return content_type && content_type.indexOf('application/json') > -1
+}
+
+class FetchPromise {
+  constructor (props) {
+    this.done_func    = function(){}
+    this.fail_func    = function(){}
+    this.always_func  = function(){}
+  }
+
+  done (func) {
+    this.done_func = func
+    return this
+  }
+
+  fail (func) {
+    this.fail_func = func
+    return this
+  }
+
+  always (func) {
+    this.always_func = func
+    return this
   }
 }

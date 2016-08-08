@@ -15,12 +15,13 @@ import Icon from 'react-native-vector-icons/FontAwesome'
 
 import HeaderBar from '../layout_components/HeaderBar'
 
+import API from 'API'
 
 // console.disableYellowBox = true;
 var full_height = Dimensions.get('window').height
 var full_width = Dimensions.get('window').width
 
-var Dashboard = React.createClass({
+export default class Dashboard extends React.Component {
   render() {
     return (
       <View style={{flex: 1}}>
@@ -30,10 +31,9 @@ var Dashboard = React.createClass({
 
         <TouchableWithoutFeedback
           onPress={() =>
-            Alert.alert(
-              '你按了一下蓝色的圆形',
-              '对不起，没啥用',
-            )
+            API.auth.sign_out().done(() => {
+              this.props.onNavigationChange('LandingPage')
+            })
           }
         >
           <View style={{
@@ -50,9 +50,9 @@ var Dashboard = React.createClass({
       </View>
     );
   }
-})
+}
 
-var Content = React.createClass({
+class Content extends React.Component {
   render() {
     return (
       <View style={styles.content}>
@@ -72,9 +72,9 @@ var Content = React.createClass({
       </View>
     )
   }
-})
+}
 
-var Footer = React.createClass({
+class Footer extends React.Component {
   render() {
     return (
       <View style={{height: 45, backgroundColor: '#fff', flexDirection: 'row', position: 'relative'}}>
@@ -86,7 +86,7 @@ var Footer = React.createClass({
       </View>
     )
   }
-})
+}
 
 
 const styles = StyleSheet.create({
@@ -101,5 +101,3 @@ const styles = StyleSheet.create({
     margin: 10,
   }
 })
-
-export default Dashboard

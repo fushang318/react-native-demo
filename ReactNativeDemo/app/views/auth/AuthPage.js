@@ -11,18 +11,19 @@ import {
   TouchableWithoutFeedback,
   TouchableHighlight,
 
-  Animated
+  Animated,
+  AsyncStorage
 } from 'react-native'
 
 import Icon from 'react-native-vector-icons/FontAwesome'
 
 import IconView from 'ReactNativeDemo/app/components/IconView'
 
-import APIFetch from 'APIFetch'
 import API from 'API'
 
 import LandingLogo from 'ReactNativeDemo/app/views/auth/LandingLogo'
 import Nav from 'ReactNativeDemo/app/views/auth/Nav'
+
 
 const input_view_height = 50
 const page_bg = '#41C4FE'
@@ -73,7 +74,7 @@ export default class SignInPage extends React.Component {
     )
   }
 
-  componentDidUpdate() {
+  componentDidUpdate () {
     Animated.parallel([
       Animated.timing(
         this.state.fadeAnim, {
@@ -124,24 +125,15 @@ class SignInForm extends React.Component {
     btn_disabled = !valid
     btn_text = valid ? '登　录' : '输入信息后点击登录'
 
-    console.log(this.state.error_tip)
-
     return (
       <View style={styles.form}>
-        <Input
-          icon='user'
-          placeholder='用户名'
-          onChangeText={(username) => this.setState({username})}
-          value={this.state.username}
-        ></Input>
+        <Input icon='user' placeholder='用户名'
+          onChangeText={this.onChangeText('username')}
+          value={this.state.username} />
 
-        <Input
-          icon='lock'
-          placeholder='密码'
-          secureTextEntry={true}
-          onChangeText={(password) => this.setState({password})}
-          value={this.state.password}
-        ></Input>
+        <Input secureTextEntry={true} icon='lock' placeholder='密码'
+          onChangeText={this.onChangeText('password')}
+          value={this.state.password} />
 
         <Button onPress={this.sign_in.bind(this)} disabled={btn_disabled} loading={this.state.loading} >
           <Text style={styles.submit_btn_text}>{btn_text}</Text>
@@ -152,23 +144,35 @@ class SignInForm extends React.Component {
     )
   }
 
+  onChangeText (field) {
+    return (value) => {
+      ns = {error_tip: null}
+      ns[field] = value
+
+      this.setState(ns)
+    }
+  }
+
   valid () {
     return this.state.username.length > 0 && this.state.password.length > 0
   }
 
-  sign_in () {
-    user = {
+  get_form_data () {
+    return {
       name: this.state.username,
-      password: this.state.password,
-      // debug: 'user_not_exists'
+      password: this.state.password
     }
+  }
 
+  sign_in () {
     this.setState({loading: true})
 
-    API.auth.sign_in(user)
+    API.auth.sign_in(this.get_form_data())
       .done((resJSON) => {
-        console.log(resJSON)
-        Alert.alert(JSON.stringify(resJSON))
+        API.get_cookie()
+          .then(function(cookie){
+            Alert.alert(cookie)
+          })
       })
       .fail((resJSON) => {
         switch(resJSON.error) {
@@ -206,20 +210,13 @@ class SignUpForm extends React.Component {
 
     return (
       <View style={styles.form}>
-        <Input
-          icon='user'
-          placeholder='用户名'
-          onChangeText={(username) => this.setState({username})}
-          value={this.state.username}
-        ></Input>
+        <Input icon='user' placeholder='用户名'
+          onChangeText={this.onChangeText('username')}
+          value={this.state.username} />
 
-        <Input
-          icon='lock'
-          placeholder='密码'
-          secureTextEntry={true}
-          onChangeText={(password) => this.setState({password})}
-          value={this.state.password}
-        ></Input>
+        <Input secureTextEntry={true} icon='lock' placeholder='密码'
+          onChangeText={this.onChangeText('password')}
+          value={this.state.password} />
 
         <Button onPress={this.sign_up.bind(this)} disabled={btn_disabled} loading={this.state.loading} >
           <Text style={styles.submit_btn_text}>{btn_text}</Text>
@@ -230,19 +227,31 @@ class SignUpForm extends React.Component {
     )
   }
 
+  onChangeText (field) {
+    return (value) => {
+      ns = {error_tip: null}
+      ns[field] = value
+
+      this.setState(ns)
+    }
+  }
+
   valid () {
     return this.state.username.length > 0 && this.state.password.length > 0
   }
 
-  sign_up () {
-    user = {
+  get_form_data () {
+    return {
       name: this.state.username,
       password: this.state.password
     }
+  }
 
-    API.auth.sign_up(user)
+  sign_up () {
+    this.setState({loading: true})
+
+    API.auth.sign_up(this.get_form_data())
       .done((resJSON) => {
-        console.log(resJSON)
         Alert.alert(JSON.stringify(resJSON))
       })
       .fail((resJSON) => {
@@ -258,6 +267,8 @@ class SignUpForm extends React.Component {
       })
   }
 }
+
+// ---------------------
 
 class Button extends React.Component {
   render () {
@@ -340,8 +351,6 @@ class InputIcon extends React.Component {
 
 class ErrorTip extends React.Component {
   render () {
-    console.log(this.props.error_tip)
-
     errs = {
       marginTop: 15,
       backgroundColor: '#0001',
