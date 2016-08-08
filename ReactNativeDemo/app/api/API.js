@@ -14,18 +14,8 @@ const build_url = (path) => {
 }
 
 const auth_sign_up = (user) => {
-  // url = build_url('/api/auth/sign_up')
-  url = build_url('/api/auth/sign_up/success')
-
-  Fetch.post(url, user)
-    .done((resJSON) => {
-      console.log(resJSON)
-    })
-    .fail((res) => {
-      res.json().then((resJSON) => {
-        Alert.alert(resJSON.error)
-      })
-    })
+  url = build_url('/api/auth/sign_up')
+  return Fetch.post(url, user)
 }
 
 const auth_sign_in = (user) => {

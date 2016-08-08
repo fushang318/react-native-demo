@@ -16,10 +16,17 @@ import {
 
 import Icon from 'react-native-vector-icons/FontAwesome'
 
-import IconView from '../../components/IconView'
+import IconView from 'ReactNativeDemo/app/components/IconView'
 
 import APIFetch from 'APIFetch'
 import API from 'API'
+
+import LandingLogo from 'ReactNativeDemo/app/views/auth/LandingLogo'
+import Nav from 'ReactNativeDemo/app/views/auth/Nav'
+
+const input_view_height = 50
+const page_bg = '#41C4FE'
+
 
 export default class SignInPage extends React.Component {
   constructor (props) {
@@ -29,22 +36,32 @@ export default class SignInPage extends React.Component {
 
       fadeAnim: new Animated.Value(1),
       leftAnim: new Animated.Value(0),
-      scaleAnim: new Animated.Value(1),
     }
   }
 
   render () {
+    page_style = {
+      flex: 1,
+      backgroundColor: page_bg,
+    }
+
+    nav_props = {
+      active: this.state.nav,
+      toggle: this.toggle.bind(this)
+    }
+
+    is_sign_in = this.state.nav == 'sign-in'
+
     return (
-      <View style={styles.page}>
-        <Nav active={this.state.nav} toggle={this.toggle.bind(this)} />
+      <View style={page_style}>
         <LandingLogo />
+        <Nav {...nav_props} />
 
         <Animated.View
           style={{
             opacity: this.state.fadeAnim,
             transform: [
-              {translateY: this.state.leftAnim},
-              {scale: this.state.scaleAnim},
+              {translateX: this.state.leftAnim},
             ]
           }}
         >
@@ -70,12 +87,6 @@ export default class SignInPage extends React.Component {
           duration: 500
         }
       ),
-      Animated.timing(
-        this.state.scaleAnim, {
-          toValue: 1,
-          duration: 500
-        }
-      ),
     ]).start()
   }
 
@@ -85,121 +96,14 @@ export default class SignInPage extends React.Component {
         return
       }
 
+      lf = (nav == 'sign-in') ? new Animated.Value(50) : new Animated.Value(50),
+
       this.setState({
         nav: nav,
         fadeAnim: new Animated.Value(0),
-        leftAnim: new Animated.Value(50),
-        scaleAnim: new Animated.Value(0.8),
+        leftAnim: lf,
       })
     }
-  }
-}
-
-class Nav extends React.Component {
-  render () {
-    var style_nav = {
-      flex: 1, padding: 45,
-      flexDirection: 'row',
-    }
-
-    var style_link = {
-      // backgroundColor: '#fff4',
-      height: 50,
-      justifyContent: 'center',
-      flex: 1,
-      borderBottomColor: 'transparent',
-      borderBottomWidth: 4,
-      borderStyle: 'solid'
-    }
-
-    var style_link_active = {
-      height: 50,
-      justifyContent: 'center',
-      flex: 1,
-      borderBottomColor: '#D9F3FF',
-      borderBottomWidth: 4,
-      borderStyle: 'solid'
-    }
-
-    var style_link_text_active = {
-      textAlign: 'center',
-      color: 'white',
-      fontSize: 20,
-    }
-
-    var style_link_text = {
-      textAlign: 'center',
-      color: 'rgba(255, 255, 255, 0.6)',
-      fontSize: 20,
-    }
-
-    var s0 = this.props.active == 'sign-in' ? style_link_active : style_link
-    var s1 = this.props.active == 'sign-up' ? style_link_active : style_link
-
-    var st0 = this.props.active == 'sign-in' ? style_link_text_active : style_link_text
-    var st1 = this.props.active == 'sign-up' ? style_link_text_active : style_link_text
-
-    return (
-      <View style={style_nav}>
-        <TouchableWithoutFeedback
-          onPress={this.props.toggle('sign-in')}
-        >
-          <View style={s0}>
-            <Text style={st0}>登录</Text>
-          </View>
-        </TouchableWithoutFeedback>
-
-        <TouchableWithoutFeedback
-          onPress={this.props.toggle('sign-up')}
-        >
-          <View style={s1}>
-            <Text style={st1}>注册</Text>
-          </View>
-        </TouchableWithoutFeedback>
-        <View style={{flex: 1}} />
-      </View>
-    )
-  }
-}
-
-class LandingLogo extends React.Component {
-  render () {
-    var style = {
-      flexDirection: 'row',
-      paddingLeft: 45,
-      paddingRight: 45,
-      // backgroundColor: 'red',
-      alignItems: 'flex-end',
-      marginBottom: 30
-    }
-
-    width = Dimensions.get('window').width - 45 * 2
-
-    w0 = width * 0.4 - 15
-    w1 = width * 0.6 - 15 - 15
-
-    s0 = {
-      width: w0, 
-      height: w0, 
-      marginLeft: 15,
-      opacity: 0.9,
-      // backgroundColor: 'lightsalmon'
-    }
-
-    s1 = {
-      width: w1,
-      height: w1 / 582 * 164, 
-      marginLeft: 15,
-      marginRight: 15,
-      // backgroundColor: 'lightgreen',
-    }
-
-    return (
-      <View style={style}>
-        <Image source={require('../../assets/image/tree.png')} style={s0} />
-        <Image source={require('../../assets/image/travel.png')} style={s1}/>
-      </View>
-    )
   }
 }
 
@@ -211,6 +115,7 @@ class SignInForm extends React.Component {
       password: '',
 
       loading: false,
+      error_tip: null,
     }
   }
 
@@ -218,6 +123,8 @@ class SignInForm extends React.Component {
     valid = this.valid()
     btn_disabled = !valid
     btn_text = valid ? '登　录' : '输入信息后点击登录'
+
+    console.log(this.state.error_tip)
 
     return (
       <View style={styles.form}>
@@ -239,6 +146,8 @@ class SignInForm extends React.Component {
         <Button onPress={this.sign_in.bind(this)} disabled={btn_disabled} loading={this.state.loading} >
           <Text style={styles.submit_btn_text}>{btn_text}</Text>
         </Button>
+
+        <ErrorTip tip={this.state.error_tip}/>
       </View>
     )
   }
@@ -262,7 +171,15 @@ class SignInForm extends React.Component {
         Alert.alert(JSON.stringify(resJSON))
       })
       .fail((resJSON) => {
-        Alert.alert(resJSON.error)
+        switch(resJSON.error) {
+          case 'AuthFailure':
+            error = '登录失败，用户名/密码不正确'
+            break;
+          case 'UserNotEXists':
+            error = '登录失败，用户不存在'
+            break;
+        }
+        this.setState({error_tip: error})
       })
       .always((res) => {
         this.setState({loading: false})
@@ -275,11 +192,18 @@ class SignUpForm extends React.Component {
     super(props)
     this.state = {
       username: '',
-      password: ''
+      password: '',
+
+      loading: false,
+      error_tip: null,
     }
   }
 
   render () {
+    valid = this.valid()
+    btn_disabled = !valid
+    btn_text = valid ? '注　册' : '输入信息后点击注册'
+
     return (
       <View style={styles.form}>
         <Input
@@ -297,11 +221,17 @@ class SignUpForm extends React.Component {
           value={this.state.password}
         ></Input>
 
-        <Button onPress={this.sign_up.bind(this)}>
-          <Text style={styles.submit_btn_text}>注　册</Text>
+        <Button onPress={this.sign_up.bind(this)} disabled={btn_disabled} loading={this.state.loading} >
+          <Text style={styles.submit_btn_text}>{btn_text}</Text>
         </Button>
+
+        <ErrorTip tip={this.state.error_tip} />
       </View>
     )
+  }
+
+  valid () {
+    return this.state.username.length > 0 && this.state.password.length > 0
   }
 
   sign_up () {
@@ -311,6 +241,21 @@ class SignUpForm extends React.Component {
     }
 
     API.auth.sign_up(user)
+      .done((resJSON) => {
+        console.log(resJSON)
+        Alert.alert(JSON.stringify(resJSON))
+      })
+      .fail((resJSON) => {
+        switch(resJSON.error) {
+          case 'UserNameAlreadyEXists':
+            error = '已经有同名用户存在'
+            break;
+        }
+        this.setState({error_tip: error})
+      })
+      .always((res) => {
+        this.setState({loading: false})
+      })
   }
 }
 
@@ -393,17 +338,48 @@ class InputIcon extends React.Component {
   }
 }
 
+class ErrorTip extends React.Component {
+  render () {
+    console.log(this.props.error_tip)
 
+    errs = {
+      marginTop: 15,
+      backgroundColor: '#0001',
+      height: 40,
+      // borderRadius: 3,
+      justifyContent: 'center',
+      paddingLeft: 40
+    }
+    hide = {
+      opacity: 0,
+    }
 
-const input_view_height = 50
-const page_bg = '#41C4FE'
+    ts = {
+      color: 'white',
+      fontSize: 16,
+    }
+
+    style = this.props.tip ? errs : [errs, hide]
+
+    return (
+      <View style={style}>
+        <IconView 
+          width={40}
+          height={40}
+          color='#fffc'
+          type='warning'
+          style={{
+            position: 'absolute',
+            top: 1, left: 0
+          }}
+        ></IconView>
+        <Text style={ts}>{this.props.tip}</Text>
+      </View>
+    )
+  }
+}
 
 const styles = {
-  page: {
-    flex: 1,
-    backgroundColor: page_bg,
-  },
-
   form: {
     padding: 45,
     marginBottom: 45
@@ -426,5 +402,5 @@ const styles = {
     textAlign: 'center',
     fontSize: 20,
     color: page_bg,
-  }
+  },
 }
