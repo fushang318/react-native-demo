@@ -177,23 +177,33 @@ class ImagePickerDemo extends React.Component {
   }
 
   update () {
-    console.log("~~~~~~~~~~")
+    // 原始方法
+    // let formData = new FormData();
+    // formData.append('cfile', {uri: this.state.imageSource.uri, type: 'application/octet-stream', name: "haha.jpg"});
+    // formData.append('title', "123");
+    // let options = {};
+    // options.body = formData;
+    // options.method = 'post';
+    // fetch('http://192.168.0.128:3000/upload', options).then((response) => {
+    //   console.log(response);
+    // })
     var uri = this.state.imageSource.uri
     console.log(uri)
+    uri = uri.replace("file://","")
     uri = RNFetchBlob.wrap(uri)
     console.log(uri)
     RNFetchBlob.fetch(
       'POST', 'http://192.168.0.128:3000/upload',
       {
         'Content-Type' : 'multipart/form-data'
-        // 'Content-Type' : 'application/octet-stream',
       },
       [
-        { name : 'avatar-foo', filename : 'avatar-foo.png', type:'image/png', data: uri},
-        { name : 'name', data : 'user'},
+        { name : "avatar", filename : 'avatar-foo.png', type:'image/png', data: uri},
+        { name : '"name1"', data : 'user1'}
       ]
-      // "RNFetchBlob-file:///storage/emulated/0/Pictures/image-33e05e3e-a03b-4fb7-9ad0-702d2ac01eec.jpg"
-    ).then((res) => {
+    ).uploadProgress((written, total) => {
+      console.log('uploaded', written / total)
+    }).then((res) => {
       console.log(res.text())
     }).catch((err) => {
       console.log(err)
