@@ -185,6 +185,12 @@ define({ "api": [
             "optional": false,
             "field": "UserNotLogin",
             "description": "<p>用户未登录</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "UserNotExists",
+            "description": "<p>用户不存在</p>"
           }
         ]
       },

@@ -83,6 +83,8 @@
   }
 
 @apiError UserNotLogin 用户未登录
+@apiError UserNotExists 用户不存在
+
 @apiErrorExample 请求失败示例
   HTTP/1.1 400 Bad Request
   {
