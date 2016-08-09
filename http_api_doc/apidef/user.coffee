@@ -15,11 +15,11 @@
    "name": "John"
   }
 
-@apiError UserNameAlreadyEXists 请求注册的用户名已经被使用
+@apiError UserNameAlreadyExists 请求注册的用户名已经被使用
 @apiErrorExample 请求失败示例
   HTTP/1.1 400 Bad Request
   {
-    "error": "UserNameAlreadyEXists"
+    "error": "UserNameAlreadyExists"
   }
 ###
 
@@ -41,7 +41,7 @@
   }
 
 @apiError AuthFailure 用户名或密码错误
-@apiError UserNotEXists 用户不存在
+@apiError UserNotExists 用户不存在
 @apiErrorExample 请求失败示例
   HTTP/1.1 400 Bad Request
   {
@@ -50,9 +50,23 @@
 ###
 
 ###
+@api {DELETE} /api/auth/sign_out 用户登出
+@apiDescription 用户登出
+@apiName 3 user sign out
+@apiGroup User
+
+@apiSuccessExample 请求成功示例
+  HTTP/1.1 200 OK
+  Set-Cookie: 清空
+  {
+   "status": "SignOutSuccess"
+  }
+###
+
+###
 @api {get} /api/users/info 获取用户信息
 @apiDescription 获取当前登录的用户信息
-@apiName 3 get user information
+@apiName 4 get user information
 @apiGroup User
 
 @apiPermission 需要登录
@@ -72,7 +86,7 @@
 ###
 @api {PUT} /api/users/info 修改用户信息
 @apiDescription 修改当前登录的用户信息
-@apiName 4 change user information
+@apiName 5 change user information
 @apiGroup User
 
 @apiPermission 需要登录

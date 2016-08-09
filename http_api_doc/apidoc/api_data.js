@@ -41,7 +41,7 @@ define({ "api": [
           {
             "group": "Error 4xx",
             "optional": false,
-            "field": "UserNameAlreadyEXists",
+            "field": "UserNameAlreadyExists",
             "description": "<p>请求注册的用户名已经被使用</p>"
           }
         ]
@@ -49,7 +49,7 @@ define({ "api": [
       "examples": [
         {
           "title": "请求失败示例",
-          "content": "HTTP/1.1 400 Bad Request\n{\n  \"error\": \"UserNameAlreadyEXists\"\n}",
+          "content": "HTTP/1.1 400 Bad Request\n{\n  \"error\": \"UserNameAlreadyExists\"\n}",
           "type": "json"
         }
       ]
@@ -106,7 +106,7 @@ define({ "api": [
           {
             "group": "Error 4xx",
             "optional": false,
-            "field": "UserNotEXists",
+            "field": "UserNotExists",
             "description": "<p>用户不存在</p>"
           }
         ]
@@ -124,11 +124,31 @@ define({ "api": [
     "groupTitle": "User"
   },
   {
+    "type": "DELETE",
+    "url": "/api/auth/sign_out",
+    "title": "用户登出",
+    "description": "<p>用户登出</p>",
+    "name": "3_user_sign_out",
+    "group": "User",
+    "success": {
+      "examples": [
+        {
+          "title": "请求成功示例",
+          "content": "HTTP/1.1 200 OK\nSet-Cookie: 清空\n{\n \"status\": \"SignOutSuccess\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "apidef/user.coffee",
+    "groupTitle": "User"
+  },
+  {
     "type": "get",
     "url": "/api/users/info",
     "title": "获取用户信息",
     "description": "<p>获取当前登录的用户信息</p>",
-    "name": "3_get_user_information",
+    "name": "4_get_user_information",
     "group": "User",
     "permission": [
       {
@@ -166,7 +186,7 @@ define({ "api": [
     "url": "/api/users/info",
     "title": "修改用户信息",
     "description": "<p>修改当前登录的用户信息</p>",
-    "name": "4_change_user_information",
+    "name": "5_change_user_information",
     "group": "User",
     "permission": [
       {
