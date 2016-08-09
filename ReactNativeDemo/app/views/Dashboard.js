@@ -17,6 +17,8 @@ import HeaderBar from '../layout_components/HeaderBar'
 
 import API from 'API'
 
+import { Actions } from 'react-native-router-flux'
+
 // console.disableYellowBox = true;
 var full_height = Dimensions.get('window').height
 var full_width = Dimensions.get('window').width
@@ -30,17 +32,19 @@ export default class Dashboard extends React.Component {
         <Footer />
 
         <TouchableWithoutFeedback
-          onPress={() =>
-            API.auth.sign_out().done(() => {
-              this.props.onNavigationChange('LandingPage')
-            })
+          onPress={
+            () => {
+              API.auth.sign_out().done(() => {
+                Actions.AuthPage()
+              })
+            }
           }
         >
           <View style={{
-            width: 64, height: 64, 
-            backgroundColor: '#41C4FE', 
-            position: 'absolute', 
-            bottom: -9, left: (full_width - 64) / 2, 
+            width: 64, height: 64,
+            backgroundColor: '#41C4FE',
+            position: 'absolute',
+            bottom: -9, left: (full_width - 64) / 2,
             borderRadius: 1000,
             justifyContent: 'center'
           }}>

@@ -1,5 +1,5 @@
-/* 
- * @providesModule API 
+/*
+ * @providesModule API
  */
 
 import {
@@ -8,8 +8,8 @@ import {
 
 import APIFetch from 'APIFetch'
 
-// const server_base = 'http://demo.roshan.top'
-const server_base = 'http://192.168.0.128:3000'
+const server_base = 'http://demo.roshan.top'
+// const server_base = 'http://192.168.0.128:3000'
 
 const build_url = (path) => {
   return server_base + path
@@ -33,7 +33,7 @@ const auth_get_user_info = () => {
 const auth_sign_out = () => {
   // return AsyncStorage.setItem('appCookie', '')
   url = build_url('/api/auth/sign_out')
-  return APIFetch.get(url)
+  return APIFetch.delete(url)
 }
 
 export default API = {

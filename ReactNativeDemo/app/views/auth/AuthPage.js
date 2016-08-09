@@ -24,6 +24,7 @@ import API from 'API'
 import LandingLogo from 'ReactNativeDemo/app/views/auth/LandingLogo'
 import Nav from 'ReactNativeDemo/app/views/auth/Nav'
 
+import { Actions } from 'react-native-router-flux'
 
 const input_view_height = 50
 const page_bg = '#41C4FE'
@@ -169,10 +170,11 @@ class SignInForm extends React.Component {
 
     API.auth.sign_in(this.get_form_data())
       .done((resJSON) => {
-        API.get_cookie()
-          .then(function(cookie){
-            Alert.alert(cookie)
-          })
+        Actions.Dashboard()
+        // API.get_cookie()
+        //   .then(function(cookie){
+        //     Alert.alert(cookie)
+        //   })
       })
       .fail((resJSON) => {
         switch(resJSON.error) {
@@ -296,7 +298,7 @@ class Button extends React.Component {
 
     if (loading) {
       press = null
-      children = 
+      children =
         <Text style={styles.submit_btn_text}>正在请求 ……</Text>
     }
 
@@ -334,7 +336,7 @@ class Input extends React.Component {
 class InputIcon extends React.Component {
   render () {
     return (
-      <IconView 
+      <IconView
         width={input_view_height}
         height={input_view_height}
         backgroundColor='#fff3'
@@ -372,7 +374,7 @@ class ErrorTip extends React.Component {
 
     return (
       <View style={style}>
-        <IconView 
+        <IconView
           width={40}
           height={40}
           color='#fffc'

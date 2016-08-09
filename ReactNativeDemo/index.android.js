@@ -10,6 +10,6 @@ import {
   AppRegistry
 } from 'react-native'
 
-import RootPage from 'ReactNativeDemo/app/views/RootPage'
+import App from 'ReactNativeDemo/app'
 
-AppRegistry.registerComponent('ReactNativeDemo', () => RootPage)
+AppRegistry.registerComponent('ReactNativeDemo', () => App)

@@ -1,5 +1,5 @@
-/* 
- * @providesModule APIFetch 
+/*
+ * @providesModule APIFetch
  */
 
 import {
@@ -49,6 +49,31 @@ export default APIFetch = {
       fetch(url, {
         method: 'POST',
         body: form_data
+      }).then(request_then(promise))
+    // })
+
+    return promise
+  },
+
+  delete (uri, data = {}) {
+    promise = new FetchPromise()
+
+    console.log("DELETE: " + url)
+    console.log(data)
+
+    form_data = new FormData()
+    for (key in data) {
+      value = data[key]
+      console.log("key: " + key)
+      console.log("value: " + value)
+      form_data.append(key, value)
+    }
+    console.log(form_data._parts.length)
+
+    // _get_cookie().then((cookie) => {
+      fetch(url, {
+        method: 'DELETE',
+        body: form_data._parts.length == 0 ? null : form_data
       }).then(request_then(promise))
     // })
 
