@@ -177,6 +177,25 @@
         }
       ]
     },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "UserNotLogin",
+            "description": "<p>用户未登录</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "请求失败示例",
+          "content": "HTTP/1.1 400 Bad Request\n{\n  \"error\": \"UserNotLogin\"\n}",
+          "type": "json"
+        }
+      ]
+    },
     "version": "0.0.0",
     "filename": "apidef/user.coffee",
     "groupTitle": "User"

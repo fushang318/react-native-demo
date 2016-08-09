@@ -81,6 +81,14 @@
    "age": null,
    "gender": null
   }
+
+@apiError UserNotLogin 用户未登录
+@apiErrorExample 请求失败示例
+  HTTP/1.1 400 Bad Request
+  {
+    "error": "UserNotLogin"
+  }
+
 ###
 
 ###
