@@ -63,13 +63,14 @@ export default class LandingPage extends Component {
         //   loading: false,
         //   current_user: resJSON,
         // })
-        Actions.Dashboard()
+        Actions.Dashboard({data: resJSON})
         // this.props.onNavigationChange('Dashboard')
       })
       .fail((resJSON) => {
         // 用户未登录
         // 转到登录页
         Actions.AuthPage()
+        // Actions.Dashboard({data: {name: "haha"}})
         // this.props.onNavigationChange('AuthPage')
       })
   }

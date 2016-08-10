@@ -170,7 +170,7 @@ class SignInForm extends React.Component {
 
     API.auth.sign_in(this.get_form_data())
       .done((resJSON) => {
-        Actions.Dashboard()
+        Actions.Dashboard({data: resJSON})
         // API.get_cookie()
         //   .then(function(cookie){
         //     Alert.alert(cookie)

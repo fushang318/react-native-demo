@@ -5,8 +5,6 @@ import {
   StyleSheet,
   Text,
   View,
-  Image,
-
   TouchableWithoutFeedback,
   Alert,
 } from 'react-native'
@@ -24,12 +22,14 @@ var full_height = Dimensions.get('window').height
 var full_width = Dimensions.get('window').width
 
 export default class Dashboard extends React.Component {
+  constructor (props) {
+    super(props)
+  }
+
   render() {
     return (
-      <View style={{flex: 1}}>
-        <HeaderBar />
-        <Content />
-        <Footer />
+      <View style={styles.view}>
+        <Content data={this.props.data} />
 
         <TouchableWithoutFeedback
           onPress={
@@ -60,21 +60,43 @@ class Content extends React.Component {
   render() {
     return (
       <View style={styles.content}>
+        <View style={styles.info}>
+          <View style={styles.info_item}>
+            <Text style={styles.info_item_key}>姓名</Text>
+            <Text style={styles.info_item_value}>{this.props.data.name}</Text>
+          </View>
+          <View style={[styles.info_item]}>
+            <Text style={styles.info_item_key}>性别</Text>
+            <Text style={styles.info_item_value}>{this.get_user_gender()}</Text>
+          </View>
+          <View style={[styles.info_item, styles.clear_border]}>
+            <Text style={styles.info_item_key}>年龄</Text>
+            <Text style={styles.info_item_value}>{this.get_user_gender()}</Text>
+          </View>
+        </View>
         <TouchableWithoutFeedback
-          onPress={() =>
-            Alert.alert(
-              '你按了一下图片',
-              '现在可以关掉这个提示了',
-            )
+          onPress={
+            () => {
+              API.auth.sign_out().done(() => {
+                Actions.AuthPage()
+              })
+            }
           }
         >
-          <Image
-            style={styles.avatar}
-            source={{uri: 'http://i.teamkn.com/i/M4mUaDaT.png?imageMogr2/thumbnail/!240x240'}}
-          />
+          <View style={styles.logout}>
+            <Text>退出登录</Text>
+          </View>
         </TouchableWithoutFeedback>
       </View>
     )
+  }
+
+  get_user_gender() {
+    return this.props.data.gender || "未知"
+  }
+
+  get_user_age() {
+    return this.props.data.age || "未知"
   }
 }
 
@@ -94,8 +116,41 @@ class Footer extends React.Component {
 
 
 const styles = StyleSheet.create({
+  view: {
+    flex: 1,
+    paddingTop: 54
+  },
+  info: {
+    marginTop: 10,
+    backgroundColor: "white",
+  },
+  info_item: {
+    paddingVertical: 10,
+    marginHorizontal: 15,
+    flexDirection: "row",
+    borderBottomWidth: 0.5,
+    borderBottomColor: '#ddd',
+  },
+  clear_border: {
+    borderBottomWidth: 0,
+  },
+  info_item_key: {
+    flex: 2,
+    fontSize: 18,
+  },
+  info_item_value: {
+    flex: 3,
+    color: "#aaa",
+    fontSize: 18,
+    textAlign: "right",
+  },
+  logout: {
+    backgroundColor: "red",
+    height: 54,
+  },
   content: {
     flex: 1,
+    backgroundColor: "#eee",
   },
 
   avatar: {
