@@ -26,31 +26,15 @@ export default class Dashboard extends React.Component {
     super(props)
   }
 
+  componentWillReceiveProps(props){
+    console.log("componentWillRecieveProps")
+    console.log(props)
+  }
+
   render() {
     return (
       <View style={styles.view}>
         <Content data={this.props.data} />
-
-        <TouchableWithoutFeedback
-          onPress={
-            () => {
-              API.auth.sign_out().done(() => {
-                Actions.AuthPage()
-              })
-            }
-          }
-        >
-          <View style={{
-            width: 64, height: 64,
-            backgroundColor: '#41C4FE',
-            position: 'absolute',
-            bottom: -9, left: (full_width - 64) / 2,
-            borderRadius: 1000,
-            justifyContent: 'center'
-          }}>
-            <Icon name='user' style={{color: 'white', fontSize: 30, textAlign: 'center', position: 'relative', top: -4}} />
-          </View>
-        </TouchableWithoutFeedback>
       </View>
     );
   }
@@ -71,20 +55,21 @@ class Content extends React.Component {
           </View>
           <View style={[styles.info_item, styles.clear_border]}>
             <Text style={styles.info_item_key}>年龄</Text>
-            <Text style={styles.info_item_value}>{this.get_user_gender()}</Text>
+            <Text style={styles.info_item_value}>{this.get_user_age()}</Text>
           </View>
         </View>
         <TouchableWithoutFeedback
-          onPress={
-            () => {
-              API.auth.sign_out().done(() => {
-                Actions.AuthPage()
-              })
-            }
-          }
+          onPress={() => Actions.EditUserInfo({data: this.props.data})}
+        >
+          <View style={styles.edit_user_info_button}>
+            <Text style={styles.edit_user_info_button_text}>编辑信息</Text>
+          </View>
+        </TouchableWithoutFeedback>
+        <TouchableWithoutFeedback
+          onPress={this.alert_sign_out.bind(this)}
         >
           <View style={styles.logout}>
-            <Text>退出登录</Text>
+            <Text style={styles.logout_text}>退出登录</Text>
           </View>
         </TouchableWithoutFeedback>
       </View>
@@ -92,11 +77,26 @@ class Content extends React.Component {
   }
 
   get_user_gender() {
-    return this.props.data.gender || "未知"
+    return this.props.data.gender || "保密"
   }
 
   get_user_age() {
-    return this.props.data.age || "未知"
+    return this.props.data.age || "保密"
+  }
+
+  alert_sign_out() {
+    Alert.alert(
+      '确定退出登录么？',
+      null,
+      [
+        {text: '确定', onPress: () => {
+          API.auth.sign_out().done(() => {
+            Actions.AuthPage()
+          })
+        }},
+        {text: '取消'},
+      ]
+    )
   }
 }
 
@@ -145,14 +145,39 @@ const styles = StyleSheet.create({
     textAlign: "right",
   },
   logout: {
+    margin: 10,
     backgroundColor: "red",
-    height: 54,
+    height: 44,
+    padding: 0,
+    justifyContent: "center",
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    bottom: 10,
+  },
+  logout_text: {
+    fontSize: 20,
+    textAlign: 'center',
+    fontWeight: "bold",
+    color: "white",
+  },
+  edit_user_info_button_text: {
+    fontSize: 20,
+    textAlign: 'center',
+    fontWeight: "bold",
+    color: "white",
+  },
+  edit_user_info_button: {
+    margin: 10,
+    backgroundColor: "red",
+    height: 44,
+    padding: 0,
+    justifyContent: "center",
   },
   content: {
     flex: 1,
     backgroundColor: "#eee",
   },
-
   avatar: {
     width: 100,
     height: 100,

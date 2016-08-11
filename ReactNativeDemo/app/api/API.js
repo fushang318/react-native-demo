@@ -30,6 +30,11 @@ const auth_get_user_info = () => {
   return APIFetch.get(url)
 }
 
+const auth_put_user_info = (user) => {
+  url = build_url('/api/users/info')
+  return APIFetch.put(url, user)
+}
+
 const auth_sign_out = () => {
   // return AsyncStorage.setItem('appCookie', '')
   url = build_url('/api/auth/sign_out')
@@ -43,6 +48,7 @@ export default API = {
     sign_up: auth_sign_up,
     sign_in: auth_sign_in,
     get_user_info: auth_get_user_info,
+    put_user_info: auth_put_user_info,
 
     sign_out: auth_sign_out,
   }

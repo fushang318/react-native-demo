@@ -55,6 +55,35 @@ export default APIFetch = {
     return promise
   },
 
+  put (url, data = {}) {
+    promise = new FetchPromise()
+
+    console.log("PUT: " + url)
+    console.log(data)
+
+    var formBody = []
+    for (var property in data) {
+      var key   = encodeURIComponent(property)
+      var value = encodeURIComponent(data[property])
+      formBody.push(key + "=" + value)
+    }
+    formBody = formBody.join("&")
+
+    console.log(formBody)
+
+    // _get_cookie().then((cookie) => {
+      fetch(url, {
+        method: 'PUT',
+        body: formBody,
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        }
+      }).then(request_then(promise))
+    // })
+
+    return promise
+  },
+
   delete (uri, data = {}) {
     promise = new FetchPromise()
 
