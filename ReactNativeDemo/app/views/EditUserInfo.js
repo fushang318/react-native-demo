@@ -11,8 +11,7 @@ import {
 import {
   Form,
   InputField,
-  PickerField,
-} from 'react-native-form-generator'
+} from 'FORM'
 
 import API from 'API'
 
@@ -21,7 +20,6 @@ import { Actions, NavBar } from 'react-native-router-flux'
 export default class EditUserInfo extends React.Component {
   constructor(props){
     super(props)
-    this.age_options = this._generate_age_options()
     this.state = {
       formData: {
         age: props.data.age,
@@ -33,6 +31,8 @@ export default class EditUserInfo extends React.Component {
   handleFormChange(formData) {
     var data = this.state.formData
     data = Object.assign(data, formData)
+    console.log("handleFormChange~~~~~~~~")
+    console.log(data)
     this.setState({formData: data})
   }
 
@@ -60,22 +60,16 @@ export default class EditUserInfo extends React.Component {
     return (
       <View style={styles.view}>
         <Form ref="edit_user_info" onChange={this.handleFormChange.bind(this)}>
-          <Text>姓名</Text>
-          <Text>{this.props.data.name}</Text>
-          <PickerField ref='gender'
+          <InputField
+            ref='gender'
             label='性别'
-            onValueChange={()=> this.state.formData.gender}
             value={this.state.formData.gender}
-            options={{
-              "保密": "保密",
-              "男": "男",
-              "女": "女"
-            }} />
-            <PickerField ref='age'
-              label='年龄'
-              onValueChange={()=> {this.state.formData.age}}
-              value={this.state.formData.age+""}
-              options={this.age_options} />
+            />
+          <InputField
+            ref='age'
+            label='年龄'
+            value={this.state.formData.age+""}
+            />
         </Form>
         <TouchableOpacity
           onPress={this.submit_user_info.bind(this)}
@@ -102,7 +96,7 @@ const styles = StyleSheet.create({
     color: "white",
   },
   submit_user_info_button: {
-    margin: 10,
+    margin: 20,
     backgroundColor: "red",
     height: 44,
     padding: 0,
