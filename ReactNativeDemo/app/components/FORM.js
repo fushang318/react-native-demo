@@ -42,7 +42,7 @@ class Form extends React.Component {
     }, this)
 
     return (
-      <View>
+      <View style={this.props.style}>
         {wrappedChildren}
       </View>
     )
@@ -72,38 +72,51 @@ class PickerField extends React.Component {
     var view_style = {
       height: 44,
       flexDirection: 'row',
-      backgroundColor: "#ccc",
+      backgroundColor: "white",
       marginBottom: 10,
     }
 
     var label_style = {
       flex: 1,
       justifyContent: "center",
-      backgroundColor: "#0001",
+      backgroundColor: "#0000",
+      paddingLeft: 10,
     }
 
     var picker_style = {
       flex: 3,
       justifyContent: "center",
       backgroundColor: "#0002",
+      paddingRight: 20,
     }
 
     var label_text_style = {
       fontSize: 18,
     }
 
+    var picker_component = {
+      position: "absolute",
+      opacity: 0,
+      top: 0,
+      bottom: 0,
+      left: 0,
+      right: 0,
+    }
+
     var picker_text_style = {
-      height: 54,
+      fontSize: 18,
+      textAlign: "right",
     }
 
     return (
-      <View style={view_style}>
+      <View style={[view_style, this.props.style]}>
         <View style={label_style}>
           <Text style={label_text_style}>{this.props.label}</Text>
         </View>
         <View style={picker_style}>
+          <Text style={picker_text_style}>{this.state.value}</Text>
           <Picker
-            style={picker_text_style}
+            style={picker_component}
             selectedValue={this.state.value}
             onValueChange={this.handleChange.bind(this)}>
             {items}

@@ -6,6 +6,8 @@ import {
   View,
   TouchableOpacity,
   ScrollView,
+  BackAndroid,
+  Platform,
 } from 'react-native'
 
 import {
@@ -13,6 +15,8 @@ import {
   InputField,
   PickerField,
 } from 'FORM'
+
+import Button from 'ReactNativeDemo/app/components/Button'
 
 import API from 'API'
 
@@ -35,11 +39,26 @@ export default class EditUserInfo extends React.Component {
     }
   }
 
+  componentWillMount() {
+    if (Platform.OS === 'android') {
+      BackAndroid.addEventListener('hardwareBackPress', this.onBackAndroid);
+    }
+  }
+
+  componentWillUnmount() {
+    if (Platform.OS === 'android') {
+      BackAndroid.removeEventListener('hardwareBackPress', this.onBackAndroid);
+    }
+  }
+
+  onBackAndroid(){
+    Actions.pop()
+    return true
+  }
+
   handleFormChange(formData) {
     var data = this.state.formData
     data = Object.assign(data, formData)
-    console.log("handleFormChange~~~~~~~~")
-    console.log(data)
     this.setState({formData: data})
   }
 
@@ -51,21 +70,22 @@ export default class EditUserInfo extends React.Component {
     return options
   }
 
-  submit_user_info() {
+  submit_user_info(event, button) {
+    button.setState({disabled: true, loading: true, loading_text: "正在保存.."})
     API.auth.put_user_info(this.state.formData)
       .done((resJSON) => {
+        button.setState({disabled: false, loading: false})
         Actions.pop({refresh:{data: resJSON}})
       })
       .fail((resJSON) => {
-        console.log("post_user_info fail")
-        console.log(resJSON)
+        button.setState({disabled: false, loading: false})
       })
   }
 
   render() {
     return (
       <View style={styles.view}>
-        <Form ref="edit_user_info" onChange={this.handleFormChange.bind(this)}>
+        <Form style={styles.form} ref="edit_user_info" onChange={this.handleFormChange.bind(this)}>
           <PickerField
             ref="gender"
             label="性别"
@@ -73,19 +93,19 @@ export default class EditUserInfo extends React.Component {
             options={this.gender_options}
             />
           <PickerField
+            style={{marginBottom: 0}}
             ref="age"
             label="年龄"
             value={this.state.formData.age}
             options={this.age_options}
             />
         </Form>
-        <TouchableOpacity
+        <Button
+          text="完成"
           onPress={this.submit_user_info.bind(this)}
-        >
-          <View style={styles.submit_user_info_button}>
-            <Text style={styles.submit_user_info_button_text}>完成</Text>
-          </View>
-        </TouchableOpacity>
+          style={styles.submit_user_info_button}
+          text_style={styles.submit_user_info_button_text}
+          />
       </View>
     )
   }
@@ -93,9 +113,12 @@ export default class EditUserInfo extends React.Component {
 
 const styles = StyleSheet.create({
   view: {
-    marginTop: 64,
-    paddingLeft: 10,
-    paddingRight: 10,
+    flex: 1,
+    paddingTop: 54,
+    backgroundColor: "#eee",
+  },
+  form: {
+    paddingTop: 10,
   },
   submit_user_info_button_text: {
     fontSize: 20,
@@ -104,7 +127,8 @@ const styles = StyleSheet.create({
     color: "white",
   },
   submit_user_info_button: {
-    margin: 20,
+    marginTop: 20,
+    marginHorizontal: 10,
     backgroundColor: "red",
     height: 44,
     padding: 0,

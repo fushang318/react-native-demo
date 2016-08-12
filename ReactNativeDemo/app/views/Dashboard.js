@@ -5,30 +5,21 @@ import {
   StyleSheet,
   Text,
   View,
-  TouchableWithoutFeedback,
   Alert,
 } from 'react-native'
-
-import Icon from 'react-native-vector-icons/FontAwesome'
-
-import HeaderBar from '../layout_components/HeaderBar'
 
 import API from 'API'
 
 import { Actions } from 'react-native-router-flux'
 
-// console.disableYellowBox = true;
+import Button from 'ReactNativeDemo/app/components/Button'
+
 var full_height = Dimensions.get('window').height
 var full_width = Dimensions.get('window').width
 
 export default class Dashboard extends React.Component {
   constructor (props) {
     super(props)
-  }
-
-  componentWillReceiveProps(props){
-    console.log("componentWillRecieveProps")
-    console.log(props)
   }
 
   render() {
@@ -58,20 +49,17 @@ class Content extends React.Component {
             <Text style={styles.info_item_value}>{this.get_user_age()}</Text>
           </View>
         </View>
-        <TouchableWithoutFeedback
+        <Button
           onPress={() => Actions.EditUserInfo({data: this.props.data})}
-        >
-          <View style={styles.edit_user_info_button}>
-            <Text style={styles.edit_user_info_button_text}>编辑信息</Text>
-          </View>
-        </TouchableWithoutFeedback>
-        <TouchableWithoutFeedback
+          text="编辑信息"
+          style={styles.edit_user_info_button}
+          text_style={styles.edit_user_info_button_text} />
+        <Button
+          text="退出登录"
+          style={styles.logout}
+          text_style={styles.logout_text}
           onPress={this.alert_sign_out.bind(this)}
-        >
-          <View style={styles.logout}>
-            <Text style={styles.logout_text}>退出登录</Text>
-          </View>
-        </TouchableWithoutFeedback>
+        />
       </View>
     )
   }
@@ -168,8 +156,9 @@ const styles = StyleSheet.create({
     color: "white",
   },
   edit_user_info_button: {
-    margin: 10,
-    backgroundColor: "red",
+    backgroundColor: '#41C4FE',
+    marginTop: 20,
+    marginHorizontal: 10,
     height: 44,
     padding: 0,
     justifyContent: "center",
