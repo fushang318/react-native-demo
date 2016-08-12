@@ -10,7 +10,7 @@ import {
 
 import API from 'API'
 
-import { Actions } from 'react-native-router-flux'
+import { Actions, ActionConst } from 'react-native-router-flux'
 
 import Button from 'ReactNativeDemo/app/components/Button'
 
@@ -81,8 +81,7 @@ class Content extends React.Component {
           console.log("sign out 1")
           API.auth.sign_out()
             .done(() => {
-              console.log("sign out done")
-              Actions.AuthPage()
+              Actions.LandingPage({type: ActionConst.RESET})
             })
         }},
         {text: '取消'},

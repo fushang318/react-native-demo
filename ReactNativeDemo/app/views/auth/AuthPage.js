@@ -24,7 +24,7 @@ import API from 'API'
 import LandingLogo from 'ReactNativeDemo/app/views/auth/LandingLogo'
 import Nav from 'ReactNativeDemo/app/views/auth/Nav'
 
-import { Actions } from 'react-native-router-flux'
+import { Actions, ActionConst } from 'react-native-router-flux'
 
 const input_view_height = 50
 const page_bg = '#41C4FE'
@@ -170,13 +170,7 @@ class SignInForm extends React.Component {
 
     API.auth.sign_in(this.get_form_data())
       .done((resJSON) => {
-        console.log(resJSON)
-        Actions.LandingPage()
-        // Actions.Dashboard({data: resJSON})
-        // API.get_cookie()
-        //   .then(function(cookie){
-        //     Alert.alert(cookie)
-        //   })
+        Actions.LandingPage({type: ActionConst.RESET})
       })
       .fail((resJSON) => {
         console.log("resJSON")
@@ -259,7 +253,7 @@ class SignUpForm extends React.Component {
 
     API.auth.sign_up(this.get_form_data())
       .done((resJSON) => {
-        Actions.LandingPage()
+        Actions.LandingPage({type: ActionConst.RESET})
       })
       .fail((resJSON) => {
         switch(resJSON.error) {

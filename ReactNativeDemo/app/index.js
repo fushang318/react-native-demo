@@ -58,9 +58,9 @@ export default class App extends React.Component {
     return (
       <Router>
         <Scene key="root">
-          <Scene key="LandingPage" component={LandingPage} initial={true} navigationBarStyle={styles.mini_nav_bar}/>
+          <Scene key="LandingPage" component={LandingPage} animation="fade" initial={true} navigationBarStyle={styles.mini_nav_bar}/>
           <Scene key="AuthPage"    component={AuthPage}    animation="fade" navigationBarStyle={styles.mini_nav_bar}/>
-          <Scene key="Dashboard"   component={Dashboard}   title="个人中心" hideNavBar={false} hideBackImage={true} navigationBarStyle={styles.nav_bar} titleStyle={styles.title}/>
+          <Scene key="Dashboard"   component={Dashboard}   animation="fade" title="个人中心" hideNavBar={false} hideBackImage={true} navigationBarStyle={styles.nav_bar} titleStyle={styles.title}/>
           <Scene key="EditUserInfo" component={EditUserInfo}
             title="编辑信息"
             hideNavBar={false}

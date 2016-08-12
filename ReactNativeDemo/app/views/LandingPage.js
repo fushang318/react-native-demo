@@ -10,7 +10,7 @@ import {
 
 import API from 'API'
 
-import { Actions } from 'react-native-router-flux'
+import { Actions, ActionConst } from 'react-native-router-flux'
 
 
 const page_bg = '#41C4FE'
@@ -63,13 +63,13 @@ export default class LandingPage extends Component {
         //   loading: false,
         //   current_user: resJSON,
         // })
-        Actions.Dashboard({data: resJSON})
+        Actions.Dashboard({data: resJSON, type: ActionConst.RESET})
         // this.props.onNavigationChange('Dashboard')
       })
       .fail((resJSON) => {
         // 用户未登录
         // 转到登录页
-        Actions.AuthPage()
+        Actions.AuthPage({type: ActionConst.RESET})
         // Actions.Dashboard({data: {name: "haha"}})
         // this.props.onNavigationChange('AuthPage')
       })
