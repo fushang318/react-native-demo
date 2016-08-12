@@ -78,9 +78,12 @@ class Content extends React.Component {
       null,
       [
         {text: '确定', onPress: () => {
-          API.auth.sign_out().done(() => {
-            Actions.AuthPage()
-          })
+          console.log("sign out 1")
+          API.auth.sign_out()
+            .done(() => {
+              console.log("sign out done")
+              Actions.AuthPage()
+            })
         }},
         {text: '取消'},
       ]

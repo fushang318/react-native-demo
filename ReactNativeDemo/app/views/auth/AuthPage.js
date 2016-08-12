@@ -170,18 +170,23 @@ class SignInForm extends React.Component {
 
     API.auth.sign_in(this.get_form_data())
       .done((resJSON) => {
-        Actions.Dashboard({data: resJSON})
+        console.log(resJSON)
+        Actions.LandingPage()
+        // Actions.Dashboard({data: resJSON})
         // API.get_cookie()
         //   .then(function(cookie){
         //     Alert.alert(cookie)
         //   })
       })
       .fail((resJSON) => {
+        console.log("resJSON")
+        console.log(resJSON)
+        var error = ""
         switch(resJSON.error) {
           case 'AuthFailure':
             error = '登录失败，用户名/密码不正确'
             break;
-          case 'UserNotEXists':
+          case 'UserNotExists':
             error = '登录失败，用户不存在'
             break;
         }
@@ -258,7 +263,7 @@ class SignUpForm extends React.Component {
       })
       .fail((resJSON) => {
         switch(resJSON.error) {
-          case 'UserNameAlreadyEXists':
+          case 'UserNameAlreadyExists':
             error = '已经有同名用户存在'
             break;
         }

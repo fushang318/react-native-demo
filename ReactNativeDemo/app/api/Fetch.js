@@ -111,11 +111,14 @@ export default APIFetch = {
 }
 
 const request_then = (promise) => {
+  console.log("request then")
   return (res) => {
-    console.log(res)
-
     // save_cookie(res).then(function(){
       if (is_json(res)) {
+        console.log("is json")
+        console.log(promise.done_func)
+        console.log(res)
+        console.log(res.ok)
         res.json().then(res.ok ? promise.done_func : promise.fail_func)
       } else {
         console.log('返回的不是 JSON 信息')
