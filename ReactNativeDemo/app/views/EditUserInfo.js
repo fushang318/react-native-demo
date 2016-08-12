@@ -101,7 +101,7 @@ export default class EditUserInfo extends React.Component {
             />
         </Form>
         <Button
-          text="完成"
+          text="保存"
           onPress={this.submit_user_info.bind(this)}
           style={styles.submit_user_info_button}
           text_style={styles.submit_user_info_button_text}
@@ -129,7 +129,7 @@ const styles = StyleSheet.create({
   submit_user_info_button: {
     marginTop: 20,
     marginHorizontal: 10,
-    backgroundColor: "red",
+    backgroundColor: "#41C4FE",
     height: 44,
     padding: 0,
     justifyContent: "center",
