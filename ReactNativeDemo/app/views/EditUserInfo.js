@@ -11,6 +11,7 @@ import {
 import {
   Form,
   InputField,
+  PickerField,
 } from 'FORM'
 
 import API from 'API'
@@ -20,9 +21,15 @@ import { Actions, NavBar } from 'react-native-router-flux'
 export default class EditUserInfo extends React.Component {
   constructor(props){
     super(props)
+    this.age_options = this._generate_age_options()
+    this.gender_options = [
+      {label:"保密", value: "保密"},
+      {label:"男", value: "男"},
+      {label:"女", value: "女"},
+    ]
     this.state = {
       formData: {
-        age: props.data.age,
+        age: props.data.age || 0,
         gender: props.data.gender,
       }
     }
@@ -37,10 +44,9 @@ export default class EditUserInfo extends React.Component {
   }
 
   _generate_age_options() {
-    var options = {"保密":"保密"}
+    var options = [{label:"保密", value: 0}]
     for(let i=1;i<=100;i++){
-      let str = i + ""
-      options[str] = str
+      options.push({label:i+"", value: i})
     }
     return options
   }
@@ -60,15 +66,17 @@ export default class EditUserInfo extends React.Component {
     return (
       <View style={styles.view}>
         <Form ref="edit_user_info" onChange={this.handleFormChange.bind(this)}>
-          <InputField
-            ref='gender'
-            label='性别'
+          <PickerField
+            ref="gender"
+            label="性别"
             value={this.state.formData.gender}
+            options={this.gender_options}
             />
-          <InputField
-            ref='age'
-            label='年龄'
-            value={this.state.formData.age+""}
+          <PickerField
+            ref="age"
+            label="年龄"
+            value={this.state.formData.age}
+            options={this.age_options}
             />
         </Form>
         <TouchableOpacity
