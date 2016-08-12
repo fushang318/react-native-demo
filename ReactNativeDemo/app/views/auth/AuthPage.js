@@ -254,7 +254,7 @@ class SignUpForm extends React.Component {
 
     API.auth.sign_up(this.get_form_data())
       .done((resJSON) => {
-        Alert.alert(JSON.stringify(resJSON))
+        Actions.LandingPage()
       })
       .fail((resJSON) => {
         switch(resJSON.error) {
