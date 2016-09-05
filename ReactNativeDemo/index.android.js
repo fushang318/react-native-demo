@@ -10,6 +10,7 @@ import {
   AppRegistry
 } from 'react-native'
 
-import App from 'ReactNativeDemo/app'
 
-AppRegistry.registerComponent('ReactNativeDemo', () => App)
+import qrcode from 'ReactNativeDemo/app/qrcode'
+
+AppRegistry.registerComponent('ReactNativeDemo', () => qrcode)
