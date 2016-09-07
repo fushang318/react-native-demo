@@ -8,6 +8,7 @@
   "dependencies": {
     "react": "15.2.1",
     "react-native": "0.30.0",
+    "react-native-barcodescanner": "^3.1.1",
     "react-native-form-generator": "^0.9.9",
     "react-native-qrcode": "^0.2.2",
     "react-native-router-flux": "3.34.0",
