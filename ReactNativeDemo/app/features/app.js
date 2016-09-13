@@ -2,19 +2,18 @@ import React from 'react'
 
 import {
     Navigator,
-} from 'react-native';
+} from 'react-native'
 
-import Features from './features';
-import QrcodeGen from './qrcode_gen';
-import QrcodeScanResult from './qrcode_scan_result';
-import QrcodeScan from './qrcode_scan'
+import SceneConfig from 'ReactNativeDemo/app/features/scene_config'
 
-import SceneConfigs from './scene_configs';
+import Features from 'ReactNativeDemo/app/features/features'
+import QrcodeGen from 'ReactNativeDemo/app/features/qrcode_gen'
+import QrcodeScan from 'ReactNativeDemo/app/features/qrcode_scan'
 
-const RouteMap = {
+
+const ROUTE_MAP = {
   'features':    {index: 0, component: Features, params: {}},
   'qrcode_gen':  {index: 1, component: QrcodeGen, params: {}},
-  'qrcode_scan_result': {index: 2, component: QrcodeScanResult, params: {}},
   'qrcode_scan': {index: 3, component: QrcodeScan, params: {}}
 };
 
@@ -25,10 +24,10 @@ class Route {
    *              有严格的映射关系，会根据传入 ID 同名的文件夹去取路由对应的页面
    * @param {any} params Component 用到的参数
    */
-  static getRoutePage (route, navigator) {
+  static get_route_page (route, navigator) {
       let id = route.id,
           params = route.params,
-          routeObj = RouteMap[id],
+          routeObj = ROUTE_MAP[id],
           Component;
       if (routeObj) {
           Component = routeObj.component;
@@ -44,9 +43,9 @@ class Route {
 }
 
 export default class App extends React.Component {
-  _renderRoute (route, navigator) {
+  _render_route (route, navigator) {
     this.navigator = navigator;
-    return Route.getRoutePage(route, navigator);
+    return Route.get_route_page(route, navigator);
   }
 
   render() {
@@ -54,14 +53,12 @@ export default class App extends React.Component {
       <Navigator
         // 初始页面
         initialRoute={{
-            id: 'features',
-            params: {}
+          id: 'features',
+          params: {}
         }}
         // 路由入口
-        renderScene={this._renderRoute.bind(this)}
-        configureScene={(route, routeStack) =>
-          SceneConfigs.PushFromRight
-        }
+        renderScene={this._render_route.bind(this)}
+        // configureScene={(route, routeStack) => SceneConfig.push_from_right}
       />
     );
   }

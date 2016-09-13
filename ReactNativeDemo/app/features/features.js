@@ -2,12 +2,12 @@ import React from 'react'
 
 import {
     Text,
-    View
-} from 'react-native';
+    View,
+} from 'react-native'
 
 import Button from 'ReactNativeDemo/app/components/Button'
 
-import {DefaultHeadBar} from 'ReactNativeDemo/app/head_bar'
+import {DefaultHeadBar} from 'ReactNativeDemo/app/features/head_bar'
 
 import SendIntentAndroid from 'react-native-send-intent'
 
@@ -17,7 +17,7 @@ export default class Features extends React.Component {
 
     return(
       <View>
-        <DefaultHeadBar navigator={this.props.navigator} title="非功能列表"/>
+        <DefaultHeadBar navigator={this.props.navigator} title="非业务功能列表"/>
         <Button
           text="二维码生成"
           onPress={()=> this.props.navigator.push({id: "qrcode_gen", params: []})}
@@ -33,10 +33,10 @@ export default class Features extends React.Component {
               title: '分享测试',
               text: '我是分享内容 blanbalblalb',
               type: SendIntentAndroid.TEXT_PLAIN
-            });
+            })
           }}
           />
       </View>
-    );
+    )
   }
 }

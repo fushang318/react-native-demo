@@ -1,17 +1,17 @@
 import React from 'react'
 
-
-import QRCode from 'react-native-qrcode';
-
 import {
   StyleSheet,
   View,
   Text,
-  TextInput
-} from 'react-native';
+  TextInput,
+  BackAndroid,
+  Platform,
+} from 'react-native'
 
-import {DefaultHeadBar} from 'ReactNativeDemo/app/head_bar'
+import QRCode from 'react-native-qrcode'
 
+import {DefaultHeadBar} from 'ReactNativeDemo/app/features/head_bar'
 
 export default class QrcodeGen extends React.Component {
   constructor(props) {
@@ -20,6 +20,24 @@ export default class QrcodeGen extends React.Component {
     this.state = {
       text: 'http://www.zhihu.com'
     }
+    this._on_back_android = this.on_back_android.bind(this)
+  }
+
+  componentWillMount() {
+    if (Platform.OS === 'android') {
+      BackAndroid.addEventListener('hardwareBackPress', this._on_back_android);
+    }
+  }
+
+  componentWillUnmount() {
+    if (Platform.OS === 'android') {
+      BackAndroid.removeEventListener('hardwareBackPress', this._on_back_android);
+    }
+  }
+
+  on_back_android(){
+    this.props.navigator.pop()
+    return true
   }
 
   render() {
@@ -44,21 +62,20 @@ export default class QrcodeGen extends React.Component {
             </View>
 
           </View>
-      );
+      )
   }
 
 }
 
 var styles = StyleSheet.create({
-    root: {
-      flex: 1,
-      backgroundColor: 'white',
-    },
-    input_box: {
-      margin: 20,
-    },
-    qrcode_box: {
-      alignItems: 'center',
-
-    }
-});
+  root: {
+    flex: 1,
+    backgroundColor: 'white',
+  },
+  input_box: {
+    margin: 20,
+  },
+  qrcode_box: {
+    alignItems: 'center',
+  }
+})

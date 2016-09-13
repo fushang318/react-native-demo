@@ -11,6 +11,6 @@ import {
 } from 'react-native'
 
 
-import app from 'ReactNativeDemo/app/app'
+import app from 'ReactNativeDemo/app/features/app'
 
 AppRegistry.registerComponent('ReactNativeDemo', () => app)

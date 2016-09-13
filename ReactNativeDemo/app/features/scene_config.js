@@ -1,19 +1,18 @@
 import React, {
     Dimensions,
-    PixelRatio
-} from 'react-native';
+    PixelRatio,
+} from 'react-native'
 
-import buildStyleInterpolator from 'buildStyleInterpolator';
+import buildStyleInterpolator from 'buildStyleInterpolator'
 
 
 /**
  * 自定义的页面切换过渡动画
  * 官方的那个带缩放的真不好看
  */
-const SCREEN_WIDTH = Dimensions.get('window').width,
-    SCREEN_HEIGHT = Dimensions.get('window').height;
+const SCREEN_WIDTH = Dimensions.get('window').width
 
-const OutToLeft = {
+const OUT_TO_LEFT = {
     transformTranslate: {
         from: {x: 0, y: 0, z: 0},
         to: {x: -SCREEN_WIDTH, y: 0, z: 0},
@@ -45,10 +44,9 @@ const OutToLeft = {
         value: 1,
         type: 'constant'
     }
-};
+}
 
-
-const InFromRight = {
+const IN_FROM_RIGHT = {
 
     transformTranslate: {
         from: {x: SCREEN_WIDTH, y: 0, z: 0},
@@ -83,9 +81,9 @@ const InFromRight = {
         value: 1,
         type: 'constant'
     }
-};
+}
 
-const BaseLeftToRightGesture = {
+const BASE_LEFT_TO_RIGHT_GESTURE = {
 
     // If the gesture can end and restart during one continuous touch
     isDetachable: false,
@@ -112,13 +110,13 @@ const BaseLeftToRightGesture = {
 
     direction: 'left-to-right'
 
-};
+}
 
-const BBTScene = {
-    PushFromRight: {
+const SCENE_CONFIG = {
+    push_from_right: {
         // A list of all gestures that are enabled on this scene
         gestures: {
-            pop: BaseLeftToRightGesture
+            pop: BASE_LEFT_TO_RIGHT_GESTURE
         },
 
         // Rebound spring parameters when transitioning FROM this scene
@@ -130,10 +128,10 @@ const BBTScene = {
 
         // Animation interpolators for horizontal transitioning:
         animationInterpolators: {
-            into: buildStyleInterpolator(InFromRight),
-            out: buildStyleInterpolator(OutToLeft)
+            into: buildStyleInterpolator(IN_FROM_RIGHT),
+            out: buildStyleInterpolator(OUT_TO_LEFT)
         }
     }
-};
+}
 
-export default BBTScene;
+export default SCENE_CONFIG

@@ -1,20 +1,11 @@
-import React from 'react';
+import React from 'react'
+
 import {
     View,
     TouchableOpacity,
     Text,
     StyleSheet,
-    Dimensions,
-    BackAndroid,
-    Alert
-} from 'react-native';
-
-// 返回操作，用于导航栏的返回
-import goBack from './go_back';
-
-// navigationBar 的固定left\title\right 布局好诡异，只能用算的了，flex 各种问题
-const screenWidth = Dimensions.get('window').width,
-    btnWidth = 68;
+} from 'react-native'
 
 const styles = StyleSheet.create({
     head_bar: {
@@ -22,6 +13,7 @@ const styles = StyleSheet.create({
       backgroundColor: '#41C4FE',
       flexDirection: 'row',
     },
+
     left: {
       flex: 1,
       alignItems: 'flex-start', 
@@ -43,15 +35,20 @@ const styles = StyleSheet.create({
     },
 
     text: {
-      fontSize: 20
+      fontSize: 20,
     },
 
-});
-
+})
 
 class DefaultHeadBar extends React.Component {
   constructor(props) {
-    super(props);
+    super(props)
+    this._on_back_android = this.on_back_android.bind(this)
+  }
+
+  on_back_android(){
+    this.props.navigator.pop()
+    return true
   }
 
   render_left() {
@@ -59,7 +56,7 @@ class DefaultHeadBar extends React.Component {
       return (
         <View style={styles.left}>
             <TouchableOpacity onPress={() => {
-                goBack(this.props.navigator);
+                this._on_back_android()
             }}>
                 <Text style={[styles.text]}>返回</Text>
             </TouchableOpacity>
@@ -91,7 +88,7 @@ class DefaultHeadBar extends React.Component {
       return(
         <View style={styles.right}>
           <TouchableOpacity onPress={() => {
-              goBack(navigator);
+            this._on_back_android()
           }}>
               <Text style={[styles.text]}>选项</Text>
           </TouchableOpacity>
@@ -111,12 +108,9 @@ class DefaultHeadBar extends React.Component {
         {this.render_title()}
         {this.render_right()}
       </View>
-    );
+    )
   }
 }
-
-
-
 
 export {
   DefaultHeadBar,
